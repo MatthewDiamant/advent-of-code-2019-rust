@@ -11,12 +11,31 @@ struct Instruction {
 }
 
 fn main() {
-    println!("Part 1: {}", calculate_gravity_assist());
+    println!("Part 1: {}", part_1());
+    println!("Part 2: {}", part_2());
 }
 
-fn calculate_gravity_assist() -> usize {
+fn part_1() -> usize {
+    let program = initialize_state(parse_input(), 12, 2);
+    return calculate_gravity_assist(program);
+}
+
+fn part_2() -> usize {
+    let input = parse_input();
+    for verb in 0..100 {
+        for noun in 0..100 {
+            let program = initialize_state(input.clone(), noun, verb);
+            let result = calculate_gravity_assist(program);
+            if result == 19690720 {
+                return 100 * noun + verb;
+            }
+        }
+    }
+    0
+}
+
+fn calculate_gravity_assist(mut program: Vec<usize>) -> usize {
     let mut index = 0;
-    let mut program = reinitialize_state(parse_input());
     while program[index] != END_PROGRAM {
         let instruction: Instruction = create_instruction(&program, index);
         program[instruction.output_index] = calculate_instruction(&instruction);
@@ -33,9 +52,9 @@ fn parse_input() -> Vec<usize> {
         .collect()
 }
 
-fn reinitialize_state(mut program: Vec<usize>) -> Vec<usize> {
-    program[1] = 12;
-    program[2] = 2;
+fn initialize_state(mut program: Vec<usize>, noun: usize, verb: usize) -> Vec<usize> {
+    program[1] = noun;
+    program[2] = verb;
     return program;
 }
 
