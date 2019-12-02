@@ -1,11 +1,13 @@
+static INPUT: &str = include_str!("./input.txt");
+
 fn main() {
     println!("Part 1: {}", mass());
     println!("Part 2: {}", total_mass());
 }
 
 fn parse_input() -> Vec<i32> {
-    let file = include_str!("./input.txt");
-    file.lines()
+    INPUT
+        .lines()
         .map(|x| i32::from_str_radix(x, 10).unwrap())
         .collect()
 }
